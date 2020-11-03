@@ -3,10 +3,11 @@
 /**
  * @var array $arResult
  * @var array $unwantedFields
+ * @var array $failedStages
  * @var int $cnt
  */
-// remove unwanted fields
 $unwantedFields = ['ID', 'STAGE_ID'];
+$failedStages = ['LOSE', 'APOLOGY'];
 $cnt = 0;
 foreach ($arResult['ENTITY_FIELDS'] as $field) {
     if (in_array($field['name'], $unwantedFields)) {
@@ -14,8 +15,7 @@ foreach ($arResult['ENTITY_FIELDS'] as $field) {
     }
 
     if ($field['name'] == 'UF_CRM_FAIL_COMMENT' &&
-        $arResult['ENTITY_DATA']['STAGE_ID'] !== 'LOSE' &&
-        $arResult['ENTITY_DATA']['STAGE_ID'] !== 'APOLOGY') {
+        !in_array($arResult['ENTITY_DATA']['STAGE_ID'], $failedStages)) {
         unset($arResult['ENTITY_FIELDS'][$cnt]);
     }
     $cnt++;
