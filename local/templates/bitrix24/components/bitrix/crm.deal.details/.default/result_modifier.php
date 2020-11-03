@@ -9,7 +9,7 @@ if ($arResult['ENTITY_DATA']['STAGE_ID'] !== 'LOSE' && $arResult['ENTITY_DATA'][
 {
     unset($arResult['ENTITY_DATA']['UF_CRM_FAIL_COMMENT']);
 }
-
+//unset($arResult['ENTITY_DATA']['STAGE_ID']);
 var_dump($arResult['ENTITY_DATA']);
 var_dump($arResult['ENTITY_DATA']['ID']);
 
