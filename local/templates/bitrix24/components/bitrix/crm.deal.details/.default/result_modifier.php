@@ -7,7 +7,6 @@ use Bitrix\Crm\PhaseSemantics;
 $unwantedFields = ['ID', 'STAGE_ID'];
 
 foreach ($arResult['ENTITY_FIELDS'] as $key => $field) {
-
     if (in_array($field['name'], $unwantedFields)) {
         unset($arResult['ENTITY_FIELDS'][$key]);
     }
