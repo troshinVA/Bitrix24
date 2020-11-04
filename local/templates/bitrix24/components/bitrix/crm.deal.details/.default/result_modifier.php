@@ -1,12 +1,10 @@
 <?php
-
+use Bitrix\Crm\PhaseSemantics;
 /**
  * @var array $arResult
  * @var array $unwantedFields
- * @var array $failedStages
  */
 $unwantedFields = ['ID', 'STAGE_ID'];
-$failedStages = ['LOSE', 'APOLOGY'];
 
 foreach ($arResult['ENTITY_FIELDS'] as $key => $field) {
 
@@ -15,8 +13,7 @@ foreach ($arResult['ENTITY_FIELDS'] as $key => $field) {
     }
 
     if ($field['name'] == 'UF_CRM_FAIL_COMMENT' &&
-        !in_array($arResult['ENTITY_DATA']['STAGE_ID'], $failedStages)) {
+        CCrmDeal::GetSemanticID($arResult['ENTITY_DATA']['STAGE_ID']) !== PhaseSemantics::FAILURE) {
         unset($arResult['ENTITY_FIELDS'][$key]);
     }
 }
-
