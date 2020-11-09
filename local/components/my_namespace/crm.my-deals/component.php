@@ -9,7 +9,7 @@ if (!Loader::IncludeModule('crm')) {
 }
 
 // Task 2
-$dealsList = CCrmDeal::GetList(
+/*$dealsList = CCrmDeal::GetList(
     $arOrder = array('ID' => 'ASC'),
     $arFilter = array('=ASSIGNED_BY' => $USER->GetID()),
     array(),
@@ -17,31 +17,31 @@ $dealsList = CCrmDeal::GetList(
 );
 while ($deal = $dealsList->fetch()) {
     $deals[] = $deal;
-}
+}*/
 
 // Task 2.1
-$activitiesList = CCrmActivity::GetList(
+/*$activitiesList = CCrmActivity::GetList(
     $arOrder = array('OWNER_ID' => 'ASC'),
-    $arFilter = array('=OWNER_TYPE_ID' => '2','=RESPONSIBLE_ID' => $USER->GetID()),
+    $arFilter = array('=OWNER_TYPE_ID' => '2', '=RESPONSIBLE_ID' => $USER->GetID()),
     $arGroupBy = false,
     $arNavStartParams = false,
     $arSelectFields = array('OWNER_ID'),
     $arOptions = array()
 );
 while ($activity = $activitiesList->fetch()) {
-    $ownerIds[] = $activity['OWNER_ID'];
+    $dealsId[] = $activity['OWNER_ID'];
 }
-$ownerIds = array_values(array_unique($ownerIds));
+$dealsId = array_values(array_unique($dealsId));
 
 $dealsList = CCrmDeal::GetList(
     $arOrder = array('ID' => 'ASC'),
-    $arFilter = array('=ASSIGNED_BY' => $USER->GetID(),'!ID' => $ownerIds),
+    $arFilter = array('=ASSIGNED_BY' => $USER->GetID(), '!ID' => $dealsId),
     array(),
     false
 );
 while ($deal = $dealsList->fetch()) {
     $deals[] = $deal;
-}
+}*/
 
 // Task 2.2
 $activitiesList = CCrmActivity::GetList(
@@ -77,6 +77,5 @@ while ($deal = $dealsList->fetch()) {
     $deals[] = $deal;
 }
 
-//var_dump($deals);
 $arResult = $deals;
 $this->IncludeComponentTemplate();
