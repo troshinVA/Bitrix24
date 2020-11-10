@@ -5,6 +5,7 @@ use Bitrix\Crm\PhaseSemantics;
 /**
  * @var array $arResult
  * @var array $unwantedFields
+ * @global $APPLICATION
  */
 $unwantedFields = ['ID', 'STAGE_ID'];
 
@@ -19,3 +20,18 @@ foreach ($arResult['ENTITY_FIELDS'] as $key => $field) {
         unset($arResult['ENTITY_FIELDS'][$key]);
     }
 }
+
+
+$arResult['TABS'][] = array(
+    'id' => 'tab_tasks',
+    'name' => 'Задачи по сделке',
+    'loader' => array(
+        'serviceUrl' => '/local/components/my_namespace/crm.deal.tasks/lazyload.ajax.php?&site' . SITE_ID . '&' . bitrix_sessid_get(),
+        'componentData' => array(
+            'template' => '',
+            'params' => array(
+                'INTERNAL_FILTER' => array('ASSOCIATED_DEAL_ID' => $arResult['ENTITY_DATA']['ID']),
+            )
+        )
+    )
+);
