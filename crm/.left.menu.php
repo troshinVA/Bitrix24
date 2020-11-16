@@ -1,11 +1,20 @@
 <?
-$aMenuLinks = Array(
-    Array(
+$aMenuLinks = array(
+    array(
         "Мои сделки",
         "/crm/my-deals/",
-        Array(),
-        Array(),
+        array(),
+        array(),
+        ""
+    ),
+    array(
+        "Задачи",
+        "/crm/deal.tasks/",
+        array(),
+        array(),
         ""
     )
+
 );
+
 ?>

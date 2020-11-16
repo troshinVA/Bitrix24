@@ -1,6 +1,7 @@
 <?php
 
 use Bitrix\Crm\PhaseSemantics;
+use Bitrix\Main\Localization\Loc;
 
 /**
  * @var array $arResult
@@ -21,10 +22,9 @@ foreach ($arResult['ENTITY_FIELDS'] as $key => $field) {
     }
 }
 
-
 $arResult['TABS'][] = array(
     'id' => 'tab_tasks',
-    'name' => 'Задачи по сделке',
+    'name' => Loc::getMessage('TASKS'),
     'loader' => array(
         'serviceUrl' => '/local/components/my_namespace/crm.deal.tasks/lazyload.ajax.php?&site' . SITE_ID . '&' . bitrix_sessid_get(),
         'componentData' => array(

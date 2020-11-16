@@ -4,5 +4,3 @@ use Bitrix\Main\Application;
 
 $bitrixTemplate = $component->getPath().'/templates/'.$this->GetName().'/'.$this->GetPageName().'.php';
 require_once(Application::getDocumentRoot().$bitrixTemplate);
-
-
