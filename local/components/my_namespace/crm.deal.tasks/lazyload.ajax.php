@@ -18,7 +18,6 @@ if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
 }
 
 if (!CModule::IncludeModule('crm')
-    || !CModule::IncludeModule('sale')
     || !CCrmSecurityHelper::IsAuthorized()
     || !check_bitrix_sessid())
 {
@@ -26,10 +25,10 @@ if (!CModule::IncludeModule('crm')
 }
 
 global $APPLICATION;
-Header('Content-Type: text/html; charset='.LANG_CHARSET);
-$APPLICATION->ShowAjaxHead();
+/*Header('Content-Type: text/html; charset='.LANG_CHARSET);
+$APPLICATION->ShowAjaxHead();*/
 
-if(\Bitrix\Main\ModuleManager::isModuleInstalled('rest'))
+/*if(\Bitrix\Main\ModuleManager::isModuleInstalled('rest'))
 {
     $APPLICATION->IncludeComponent(
         'bitrix:app.placement',
@@ -44,19 +43,19 @@ if(\Bitrix\Main\ModuleManager::isModuleInstalled('rest'))
         null,
         array('HIDE_ICONS' => 'Y')
     );
-}
+}*/
 
 $componentData = isset($_REQUEST['PARAMS']) && is_array($_REQUEST['PARAMS']) ? $_REQUEST['PARAMS'] : array();
 $componentParams = isset($componentData['params']) && is_array($componentData['params']) ? $componentData['params'] : array();
 
 //Security check
-$userPermissions = CCrmPerms::GetCurrentUserPermissions();
+/*$userPermissions = CCrmPerms::GetCurrentUserPermissions();
 $filter = isset($componentParams['INTERNAL_FILTER']) && is_array($componentParams['INTERNAL_FILTER'])
-    ? $componentParams['INTERNAL_FILTER'] : array();
+    ? $componentParams['INTERNAL_FILTER'] : array();*/
 
 //ASSOCIATED_CONTACT_ID - new multiple binding
 //CONTACT_ID - old sigle binding
-$contactID = isset($filter['ASSOCIATED_CONTACT_ID'])
+/*$contactID = isset($filter['ASSOCIATED_CONTACT_ID'])
     ? $filter['ASSOCIATED_CONTACT_ID']
     : (isset($filter['CONTACT_ID']) ? $filter['CONTACT_ID'] : 0);
 $companyID = isset($filter['COMPANY_ID']) ? $filter['COMPANY_ID'] : 0;
@@ -64,9 +63,9 @@ $leadID = isset($filter['LEAD_ID']) ? $filter['LEAD_ID'] : 0;
 $quoteID = isset($filter['QUOTE_ID']) ? $filter['QUOTE_ID'] : 0;
 $dealID = isset($filter['ASSOCIATED_DEAL_ID'])
     ? $filter['ASSOCIATED_DEAL_ID']
-    : (isset($filter['DEAL_ID']) ? $filter['DEAL_ID'] : 0);
+    : (isset($filter['DEAL_ID']) ? $filter['DEAL_ID'] : 0);*/
 
-$isPermitted = false;
+/*$isPermitted = false;
 if($contactID > 0)
 {
     $isPermitted = CCrmContact::CheckReadPermission($contactID, $userPermissions);
@@ -91,7 +90,7 @@ elseif($dealID > 0)
 if(!$isPermitted)
 {
     die();
-}
+}*/
 //For custom reload with params
 $ajaxLoaderParams = array(
     'url' => '/local/components/my_namespace/crm.deal.tasks/lazyload.ajax.php?&site='.SITE_ID.'&'.bitrix_sessid_get(),
@@ -115,6 +114,5 @@ $APPLICATION->IncludeComponent('my_namespace:crm.deal.tasks',
     false,
     array('HIDE_ICONS' => 'Y', 'ACTIVE_COMPONENT' => 'Y')
 );
-var_dump($componentParams);
 require_once($_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/epilog_after.php');
 die();

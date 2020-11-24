@@ -12,8 +12,8 @@ class CDealTasks extends CBitrixComponent
      */
     private function init()
     {
-        $this->arResult['FILTER_ID'] = 'CUSTOM_DEAL_TASKS';
-        $this->arResult['GRID_ID'] = 'CUSTOM_DEAL_TASKS';
+        $this->arResult['FILTER_ID'] = 'DEAL_TASKS';
+        $this->arResult['GRID_ID'] = 'DEAL_TASKS';
         \Bitrix\Main\Loader::includeModule('tasks');
         \Bitrix\Main\Loader::includeModule('crm');
     }
@@ -23,23 +23,14 @@ class CDealTasks extends CBitrixComponent
      */
     private function getDataFilter()
     {
-        $filterOptions = new Bitrix\Main\UI\Filter\Options($this->arResult['GRID_ID']);
+        $filterOptions = new Bitrix\Main\UI\Filter\Options($this->arResult['FILTER_ID']);
         $filterData = $filterOptions->getFilter($this->arResult["FILTER"]);
         $searchString = $filterOptions->getSearchString();
         $filter = [];
         foreach ($filterData as $k => $v) {
-            if ($k == 'DEAL_LIST') {
-                if ($filterData[$k] !== 0) {
-                    $filterData['UF_CRM_TASK'] = 'D_' . $filterData[$k];
-                } else {
-                    unset($filterData['UF_CRM_TASK']);
-                }
-            } else {
-                $filterData[$k] = $filterData[$v];
-            }
-
+            $filter[$k] = $v;
         }
-//        $filter['UF_CRM_TASK'] = 'D_' . $this->arParams['INTERNAL_FILTER']['ASSOCIATED_DEAL_ID'];
+        $filter['UF_CRM_TASK'] = 'D_' . $this->arParams['INTERNAL_FILTER']['ASSOCIATED_DEAL_ID'];
         return $filter;
     }
 
@@ -66,12 +57,11 @@ class CDealTasks extends CBitrixComponent
     {
         $items = ['0' => Loc::getMessage('ALL_DEAL')];
         $items = array_merge($items, $this->makeDealList());
-
         $this->arResult['FILTER'] = array(
             array("id" => "TITLE", "name" => Loc::getMessage('TASK_TITLE'), "default" => false),
             array("id" => "RESPONSIBLE_NAME", "name" => Loc::getMessage('RESPONSIBLE'), "default" => false),
             array("id" => "DEADLINE", "name" => Loc::getMessage('DEADLINE'), "type" => "date", "default" => false),
-            array("id" => "DEAL_LIST", "name" => Loc::getMessage('CHOOSE_DEAL'), "default" => true, "type" => "list",
+            array("id" => "DEAL_LIST", "name" => Loc::getMessage('CHOOSE_DEAL'), "default" => false, "type" => "list",
                 "items" => $items)
         );
     }
@@ -80,11 +70,11 @@ class CDealTasks extends CBitrixComponent
     {
         $this->arResult['COLUMNS'] = array(
             array("id" => "TITLE", "name" => Loc::getMessage('TASK_TITLE'), "sort" => "TITLE", "default" => true, "editable" => false),
-            array("id" => "DESCRIPTION", "name" => Loc::getMessage('DESCRIPTION'),"sort" => "DESCRIPTION", "default" => true, "editable" => false),
+            array("id" => "DESCRIPTION", "name" => Loc::getMessage('DESCRIPTION'), "sort" => "DESCRIPTION", "default" => true, "editable" => false),
             array("id" => "RESPONSIBLE_NAME", "name" => Loc::getMessage('RESPONSIBLE'), "sort" => "RESPONSIBLE_NAME", "default" => true, "editable" => false),
             array("id" => "DEADLINE", "name" => Loc::getMessage('DEADLINE'), "sort" => "DEADLINE", "default" => true, "editable" => false),
-            array("id" => "CREATOR", "name" => Loc::getMessage('CREATOR'),"sort" => "CREATOR", "default" => true, "editable" => false),
-            array("id" => "DEAL_ID", "name" => Loc::getMessage('ASSOCIATED_DEAL_ID'), "sort" => "DEAL_ID","default" => true, "editable" => false)
+            array("id" => "CREATOR", "name" => Loc::getMessage('CREATOR'), "sort" => "CREATOR", "default" => true, "editable" => false),
+            array("id" => "DEAL_ID", "name" => Loc::getMessage('ASSOCIATED_DEAL_ID'), "sort" => "DEAL_ID", "default" => true, "editable" => false)
         );
     }
 
@@ -125,12 +115,13 @@ class CDealTasks extends CBitrixComponent
                     'RESPONSIBLE_NAME' => $row['RESPONSIBLE_NAME'] . ' ' . $row['RESPONSIBLE_LAST_NAME'],
                     'DEADLINE' => $row['DEADLINE'],
                     'CREATOR' => $row['CREATED_BY_NAME'] . ' ' . $row['CREATED_BY_LAST_NAME'],
-                    'DEAL_ID' => $row['UF_CRM_TASK']
+                    'DEAL_ID' => $row['UF_CRM_TASK'][0]
                 ]
             ];
 
             $this->arResult['NAV-OBJECT'] = $nav;
             $this->arResult['SORT'] = $sort['sort'];
+            $this->arResult['SORT_VARS'] = $sort['vars'];
             $this->arResult['ROWS'] = $list;
         }
     }
