@@ -9,8 +9,11 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
  * @var array $arResult
  * @global $APPLICATION
  */
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+//require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+require_once($_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog.php');
+//require_once($_SERVER["DOCUMENT_ROOT"].'/bitrix/modules/main/include/prolog_before.php');
 $APPLICATION->SetTitle(Loc::getMessage('TITLE'));
+
 
 ?>
     <div>
@@ -61,4 +64,5 @@ $APPLICATION->IncludeComponent('bitrix:main.ui.grid', '',
         'AJAX_OPTION_HISTORY' => 'N'
     ]
 );
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php"); ?>
+//require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php");
+require_once($_SERVER["DOCUMENT_ROOT"].'/bitrix/modules/main/include/epilog_after.php');?>

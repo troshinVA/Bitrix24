@@ -19,14 +19,15 @@ class CDealTasks extends CBitrixComponent
     }
 
     /**
+     * @param $gridOptions
      * @return array
      */
-    private function getDataFilter()
+    private function getDataFilter($gridOptions)
     {
         $filterOptions = new Bitrix\Main\UI\Filter\Options($this->arResult['FILTER_ID']);
+        $filter = $gridOptions->GetFilter($this->arResult['FILTER']);
         $filterData = $filterOptions->getFilter($this->arResult["FILTER"]);
         $searchString = $filterOptions->getSearchString();
-        $filter = [];
         foreach ($filterData as $k => $v) {
             $filter[$k] = $v;
         }
@@ -83,18 +84,18 @@ class CDealTasks extends CBitrixComponent
      */
     public function setRows()
     {
-        $grid_options = new CGridOptions($this->arResult['GRID_ID']);
-        $nav_params = $grid_options->GetNavParams();
+        $gridOptions = new CGridOptions($this->arResult['GRID_ID']);
+        $navParams = $gridOptions->GetNavParams();
         $nav = new PageNavigation($this->arResult['GRID_ID']);
         $nav->allowAllRecords(true)
-            ->setPageSize($nav_params['nPageSize'])
+            ->setPageSize($navParams['nPageSize'])
             ->initFromUri();
         if ($nav->allRecordsShown()) {
-            $nav_params = false;
+            $navParams = false;
         } else {
-            $nav_params['iNumPage'] = $nav->getCurrentPage();
+            $navParams['iNumPage'] = $nav->getCurrentPage();
         }
-        $sort = $grid_options->GetSorting(['sort' => ['ID' => 'DESC'], 'vars' => ['by' => 'by', 'order' => 'order']]);
+        $sort = $gridOptions->GetSorting(['sort' => ['ID' => 'DESC'], 'vars' => ['by' => 'by', 'order' => 'order']]);
         $aSelect = [
             'TITLE',
             'DESCRIPTION',
@@ -105,7 +106,7 @@ class CDealTasks extends CBitrixComponent
             'CREATED_BY_NAME',
             'CREATED_BY_LAST_NAME'
         ];
-        $res = $this->getTasks($sort['sort'], $this->getDataFilter(), $aSelect);
+        $res = $this->getTasks($sort['sort'], $this->getDataFilter($gridOptions), $aSelect);
 
         while ($row = $res->GetNext()) {
             $list[] = [
