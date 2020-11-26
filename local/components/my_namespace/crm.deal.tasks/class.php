@@ -29,9 +29,21 @@ class CDealTasks extends CBitrixComponent
         $filterData = $filterOptions->getFilter($this->arResult["FILTER"]);
         $searchString = $filterOptions->getSearchString();
         foreach ($filterData as $k => $v) {
-            $filter[$k] = $v;
+            if($k == 'DEAL_LIST'){
+                if($v == '0'){
+                    unset($filter['UF_CRM_TASK']);
+                }else{
+                    $filter['UF_CRM_TASK'] = 'D_'.$v;
+                }
+            }else{
+                $filter[$k] = $v;
+            }
         }
-        $filter['UF_CRM_TASK'] = 'D_' . $this->arParams['INTERNAL_FILTER']['ASSOCIATED_DEAL_ID'];
+
+        if(isset($this->arParams['INTERNAL_FILTER']['ASSOCIATED_DEAL_ID'])){
+            $filter['UF_CRM_TASK'] = 'D_' . $this->arParams['INTERNAL_FILTER']['ASSOCIATED_DEAL_ID'];
+        }
+
         return $filter;
     }
 
